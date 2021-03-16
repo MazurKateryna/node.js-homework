@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require("path");
+const { nanoid } = require('nanoid')
 const contactsPath = path.join(__dirname, "./db/contacts.json");
 
 function listContacts() {
@@ -41,9 +42,9 @@ function removeContact(contactId) {
 function addContact(name, email, phone) {
   fs.readFile(contactsPath, "utf-8", (err, data) => {
     const contactsList = JSON.parse(data);
-    const newId = contactsList.reduce((acc, el) => (el.id > acc ? el.id : acc), 0) + 1;
+    const id = nanoid();
 
-    const newContact = { id: newId, name, email, phone };
+    const newContact = { id, name, email, phone };
     contactsList.push(newContact);
 
     const newContactsJSON = JSON.stringify(contactsList);
@@ -53,7 +54,7 @@ function addContact(name, email, phone) {
         console.log(err);
         return;
       }
-      console.log(`Contact with id: ${newId} has been created`);
+      console.log(`Contact with id: ${id} has been created`);
       console.table(contactsList);
     });
   });
